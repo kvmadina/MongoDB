@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mahsulotlar ro'yxati</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312222B'/%3E%3Crect x='8' y='17' width='4' height='8' fill='%231C7C54'/%3E%3Crect x='14' y='12' width='4' height='13' fill='%23D9E4EA'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%231F6F8B'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #12222b;
+      --ink-2: #4a6270;
+      --ink-3: #7b909c;
+      --paper: #ffffff;
+      --bg: #e7edf1;
+      --line: #cdd9e1;
+      --accent: #1f6f8b;
+      --ok: #1c7c54;
+      --warn: #a85e14;
+      --danger: #a8322d;
+      --radius: 10px;
+      --shadow: 0 1px 2px rgba(18, 34, 43, 0.05), 0 10px 26px -20px rgba(18, 34, 43, 0.5);
+      --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+      --sans: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background-color: var(--bg);
+      /* Ombor daftari: juda xira graf qog'oz to'ri */
+      background-image:
+        linear-gradient(rgba(18, 34, 43, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 34, 43, 0.045) 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* --- Yuqori band --- */
+    .bosh {
+      background: var(--ink);
+      color: #fff;
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .bosh__ich {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 22px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #7ea8b8;
+    }
+
+    .bosh h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    #xulosa {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #a9c4cf;
+    }
+
+    /* --- Tarh --- */
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 26px 20px 64px;
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel--forma {
+      position: sticky;
+      top: 26px;
+    }
+
+    .bolim-nomi {
+      margin: 0 0 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-2);
+    }
+
+    /* --- Forma --- */
+    .maydon {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-2);
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--ink);
+      background: #fbfdfe;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    input[type='number'] {
+      font-family: var(--mono);
+    }
+
+    input:hover,
+    select:hover {
+      border-color: var(--ink-3);
+    }
+
+    input:focus,
+    select:focus {
+      background: #fff;
+      border-color: var(--accent);
+    }
+
+    .izoh {
+      display: block;
+      margin-top: 5px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--ink-3);
+    }
+
+    .tugma {
+      font-family: var(--sans);
+      font-size: 13px;
+      padding: 7px 11px;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .tugma:hover {
+      background: #f2f7f9;
+      border-color: var(--ink-3);
+    }
+
+    .tugma:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .tugma--asosiy {
+      width: 100%;
+      margin-top: 4px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .tugma--asosiy:hover {
+      background: #1c3743;
+      border-color: #1c3743;
+    }
+
+    .tugma--asosiy:active {
+      transform: translateY(1px);
+    }
+
+    /* --- Xabar --- */
+    #xabar {
+      margin: 0 0 14px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left-width: 3px;
+      border-radius: 8px;
+    }
+
+    #xabar.ok {
+      color: #12452f;
+      background: #f1f8f4;
+      border-color: #c8e2d4;
+      border-left-color: var(--ok);
+    }
+
+    #xabar.ogoh {
+      color: #6b3d0c;
+      background: #fdf6ed;
+      border-color: #ead9c0;
+      border-left-color: var(--warn);
+    }
+
+    #xabar.xato {
+      color: #6e211d;
+      background: #fcf2f1;
+      border-color: #e4c3c0;
+      border-left-color: var(--danger);
+    }
+
+    #xabar:empty {
+      display: none;
+    }
+
+    /* --- Ro'yxat --- */
+    .royxat-bosh {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .royxat-bosh .bolim-nomi {
+      margin: 0;
+    }
+
+    .tartib {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--ink-3);
+    }
+
+    ul#royxat {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #royxat li {
+      position: relative;
+      overflow: hidden;
+      padding: 12px 14px 12px 20px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      grid-template-areas: 'nomi narx miqdor amal';
+      align-items: center;
+      gap: 8px 18px;
+    }
+
+    /* Signatura: chap qirradagi zaxira chizig'i — rangi miqdor holatini bildiradi */
+    #royxat li.qator::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      background: var(--line);
+    }
+
+    #royxat li.holat--yetarli::before {
+      background: var(--ok);
+    }
+
+    #royxat li.holat--kam::before {
+      background: var(--warn);
+    }
+
+    #royxat li.holat--tugagan::before {
+      background: var(--danger);
+    }
+
+    .qator__nomi {
+      grid-area: nomi;
+      min-width: 0;
+    }
+
+    .nomi {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      overflow-wrap: anywhere;
+    }
+
+    .tafsilot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 7px;
+      color: var(--ink-2);
+      background: #f2f7f9;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+
+    .chip--yoq {
+      text-transform: none;
+      letter-spacing: 0.02em;
+      color: var(--danger);
+      background: #fcf2f1;
+      border-color: #e4c3c0;
+    }
+
+    .qator__narx {
+      grid-area: narx;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .qator__miqdor {
+      grid-area: miqdor;
+      text-align: right;
+      white-space: nowrap;
+      min-width: 62px;
+    }
+
+    .qator__narx .son,
+    .qator__miqdor .son {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .qator__miqdor .son {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .holat--yetarli .qator__miqdor .son {
+      color: var(--ok);
+    }
+
+    .holat--kam .qator__miqdor .son {
+      color: var(--warn);
+    }
+
+    .holat--tugagan .qator__miqdor .son {
+      color: var(--danger);
+    }
+
+    .birlik {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+    }
+
+    .tugmalar {
+      grid-area: amal;
+      display: flex;
+      gap: 6px;
+    }
+
+    .tugma--qosh {
+      font-family: var(--mono);
+      font-weight: 600;
+      min-width: 46px;
+    }
+
+    .tugma--ochir {
+      color: var(--danger);
+      border-color: #e4c3c0;
+    }
+
+    .tugma--ochir:hover,
+    .tugma--ochir[data-tasdiq='1'] {
+      color: #fff;
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* --- Bo'sh, yuklanish va xato holatlari --- */
+    #royxat li.bosh,
+    #royxat li.xato-qatori {
+      display: block;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: none;
+      border-style: dashed;
+      color: var(--ink-2);
+      font-size: 13.5px;
+    }
+
+    #royxat li.xato-qatori {
+      border-color: #e4c3c0;
+      background: #fcf2f1;
+      color: #6e211d;
+    }
+
+    #royxat li.xato-qatori .tugma {
+      margin-top: 12px;
+    }
+
+    #royxat li.skelet {
+      display: block;
+      padding: 16px 20px;
+    }
+
+    .skelet__chiziq {
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #e9eff2, #f6f9fb, #e9eff2);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s linear infinite;
+    }
+
+    .skelet__chiziq--tor {
+      width: 40%;
+      height: 9px;
+      margin-top: 9px;
+    }
+
+    @keyframes shimmer {
+      from {
+        background-position: 200% 0;
+      }
+      to {
+        background-position: -200% 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .skelet__chiziq {
+        animation: none;
+      }
+      .tugma--asosiy:active {
+        transform: none;
+      }
+    }
+
+    /* --- Moslashuvchanlik --- */
+    @media (max-width: 880px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+      }
+      .panel--forma {
+        position: static;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .tartib {
+        display: none;
+      }
+      #royxat li {
+        grid-template-columns: auto auto;
+        grid-template-areas:
+          'nomi nomi'
+          'narx miqdor'
+          'amal amal';
+        justify-content: start;
+        gap: 12px 24px;
+      }
+      .qator__narx,
+      .qator__miqdor {
+        text-align: left;
+      }
+      .tugmalar {
+        justify-self: stretch;
+      }
+      .tugmalar .tugma {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="bosh">
+    <div class="bosh__ich">
+      <div>
+        <p class="eyebrow">Ombor daftari</p>
+        <h1>Mahsulotlar ro'yxati</h1>
+      </div>
+      <p id="xulosa"></p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel panel--forma">
+      <h2 class="bolim-nomi">Yangi mahsulot</h2>
+
+      <form id="forma">
+        <div class="maydon">
+          <label for="name">Nomi</label>
+          <input type="text" id="name" name="name" placeholder="Masalan: Samsung A54" required />
+        </div>
+
+        <div class="maydon">
+          <label for="category">Turkum</label>
+          <select id="category" name="category" required>
+            <option value="kitob">Kitob</option>
+            <option value="telefon">Telefon</option>
+            <option value="kiyim">Kiyim</option>
+            <option value="oziq-ovqat">Oziq-ovqat</option>
+          </select>
+        </div>
+
+        <div class="maydon">
+          <label for="price">Narxi</label>
+          <input type="number" id="price" name="price" min="0" step="0.01" required />
+          <span class="izoh">so'mda</span>
+        </div>
+
+        <div class="maydon">
+          <label for="qty">Miqdori</label>
+          <input type="number" id="qty" name="qty" min="0" step="1" value="0" />
+          <span class="izoh">dona</span>
+        </div>
+
+        <button type="submit" class="tugma tugma--asosiy">Ro'yxatga qo'shish</button>
+      </form>
+    </section>
+
+    <section>
+      <div class="royxat-bosh">
+        <h2 class="bolim-nomi">Ombordagi mahsulotlar</h2>
+        <span class="tartib">yangi qo'shilgani yuqorida</span>
+      </div>
+
+      <p id="xabar" role="status" aria-live="polite"></p>
+
+      <ul id="royxat"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
